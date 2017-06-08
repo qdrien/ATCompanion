@@ -1,0 +1,32 @@
+{
+
+  "manifest_version": 2,
+  "name": "ATCompanion",
+  "version": "1.0",
+
+  "description": "A toolbox for AT",
+  "homepage_url": "https://github.com/qdrien/ATCompanion",
+
+  "icons": {
+    "48": "icons/ico-48.png",
+	"96": "icons/ico-96.png"
+  },
+  
+  "permissions": [
+    "activeTab",
+	"webRequest",
+    "<all_urls>"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.kongregate.com/games/Throwdown/animation-throwdown*"],
+      "js": ["atcompanion.js"]
+    }
+  ],
+  
+  "background": {
+    "scripts": ["background.js"]
+  }
+
+}
