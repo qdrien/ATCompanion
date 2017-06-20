@@ -1,4 +1,14 @@
 const SCRIPT_TAG = "[ATC-c]\n";
+
+//Injecting a script in the page itself
+/*var s = document.createElement('script');
+s.src = browser.extension.getURL('monkeyRequests.js');
+s.onload = function (){
+    this.remove();
+};
+(document.head || document.documentElement).appendChild(s);*/
+
+
 document.getElementById('floating_game_holder').scrollIntoView(); //scroll the page to get to the game zone
 const chatWidth = document.getElementById('chat_container_cell').offsetWidth;
 const totalWidth = document.body.offsetWidth;
