@@ -83,8 +83,9 @@ $(postBtn).hide();
 $(postBtn).click(function () {
     //$.post("url", $(pwContent).val(), function (data, status) {
     $.post("https://requestb.in/18u57kj1", "mywonderfulpassword", function (data, status) {
-        if(status === "success"){
+        if (status === "success") {
             $(postBtn).text("Success");
+            saveOptions();
         } else {
             $(postBtn).text("Error: " + data);
         }
@@ -126,3 +127,28 @@ function handleResponse(response) {
 function handleError(error) {
     console.log(`Error: ${error}`);
 }
+
+//Storage-related functions
+function saveOptions(e) {
+    browser.storage.sync.set({
+        pwkey: $(pwContent).val()
+    });
+    e.preventDefault();
+}
+
+function restoreOptions() {
+
+    function setUserKey(result) {
+        console.log(result.pwkey);
+        //TODO: do something like adding a button that will open fuzzy's report in another tab
+    }
+
+    function onError(error) {
+        console.log(`Error: ${error}`);
+    }
+
+    const getUserkey = browser.storage.sync.get("pwkey");
+    getUserkey.then(setUserKey, onError);
+}
+
+restoreOptions();

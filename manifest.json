@@ -11,10 +11,11 @@
     "48": "icons/ico-48.png",
 	"96": "icons/ico-96.png"
   },
-  
+
   "permissions": [
     "activeTab",
 	"webRequest",
+    "storage",
     "<all_urls>"
   ],
 
@@ -24,10 +25,17 @@
       "js": ["js/jquery-3.2.1.min.js", "atcompanion.js"]
     }
   ],
-  
+
   "background": {
     "scripts": ["js/jquery-3.2.1.min.js", "background.js"],
 	"persistent" : true
+  },
+
+  "applications": {
+    "gecko": {
+      "id": "qdrien@gmail.com",
+      "strict_min_version": "42.0"
+    }
   },
 
   "web_accessible_resources": [
