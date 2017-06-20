@@ -24,7 +24,7 @@ $(container).css({
 $("body").append(container);
 
 //a slider button to toggle the container panel
-const slider = $("<img src="+ browser.extension.getURL("img/slide-right.png") +" />");
+const slider = $("<img src=" + browser.extension.getURL("img/slide-right.png") + " />");
 $(slider).css({
     "position": "fixed",
     "top": 0,
@@ -35,24 +35,24 @@ $(slider).css({
 });
 $("body").append(slider);
 //slider interaction
-$(slider).click(function (){
+$(slider).click(function () {
     const currentLeft = $(container).css("left");
     console.log(SCRIPT_TAG + parseInt(currentLeft) + " // " + containerDefaultLeft);
-    if(parseInt(currentLeft) <= containerDefaultLeft){
+    if (parseInt(currentLeft) <= containerDefaultLeft) {
         $(container).animate({
-            left: '+='+ (chatWidth - 10)
+            left: '+=' + (chatWidth - 10)
         });
         $(slider).animate({
-            left: '+='+ (chatWidth - 50)
+            left: '+=' + (chatWidth - 50)
         });
         $(slider).attr("src", browser.extension.getURL("img/slide-left.png"));
     }
     else {
         $(container).animate({
-            left: '-='+ (chatWidth - 10)
+            left: '-=' + (chatWidth - 10)
         });
         $(slider).animate({
-            left: '-='+ (chatWidth - 50)
+            left: '-=' + (chatWidth - 50)
         });
         $(slider).attr("src", browser.extension.getURL("img/slide-right.png"));
     }
@@ -64,21 +64,37 @@ $(pwContent).hide();
 $(container).append(pwContent);
 
 //a button to copy the key to the clipboard
-const btn = $("<button type='button'>Copy password key</button>");
-$(container).append(btn);
-$(btn).hide();
+const copyBtn = $("<button type='button'>Copy password key</button>");
+$(container).append(copyBtn);
+$(copyBtn).hide();
 
-$(btn).click(function(){
+$(copyBtn).click(function () {
     $(pwContent).show();
     $(pwContent)[0].select();
     document.execCommand("copy");
     $(pwContent).hide();
 });
 
+//a button to send the key via a post request (therefore signing up to fuzzy's stuff)
+const postBtn = $("<button type='button'>Send password key to RumbleAnalytics</button>");
+$(container).append('<br />').append(postBtn);
+$(postBtn).hide();
+
+$(postBtn).click(function () {
+    //$.post("url", $(pwContent).val(), function (data, status) {
+    $.post("https://requestb.in/18u57kj1", "mywonderfulpassword", function (data, status) {
+        if(status === "success"){
+            $(postBtn).text("Success");
+        } else {
+            $(postBtn).text("Error: " + data);
+        }
+    });
+});
+
 //a loading image that is displayed until the password key is extracted
-const loadingGif = $("<img src="+ browser.extension.getURL("img/loading.gif") +" />");
+const loadingGif = $("<img src=" + browser.extension.getURL("img/loading.gif") + " />");
 $(loadingGif).css({
-    "width":"100%",
+    "width": "100%",
     "position": "absolute",
     "top": 0,
     "bottom": 0,
@@ -99,13 +115,14 @@ const sending = browser.runtime.sendMessage({
 sending.then(handleResponse, handleError);
 
 function handleResponse(response) {
-    if(response.password !== ""){
+    if (response.password !== "") {
         $(pwContent).val(response.password);
-        $(btn).show();
+        $(copyBtn).show();
+        $(postBtn).show();
         $(loadingGif).remove();
     }
 }
 
 function handleError(error) {
-  console.log(`Error: ${error}`);
+    console.log(`Error: ${error}`);
 }
